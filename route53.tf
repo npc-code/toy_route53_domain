@@ -1,22 +1,13 @@
-locals {
-    domain = var.domain_name
-    # Removing trailing dot from domain - just to be sure :)
-    domain_name = trimsuffix(local.domain, ".")
-    
-}
-
-
 resource "aws_route53_zone" "main_zone" {
-  name = local.domain_name
+  name = var.domain_name
   force_destroy = true
 }
 
 #maybe move this to another module?
 
 resource "aws_acm_certificate" "cert_request" {
-  domain_name               = local.domain_name
-  #subject_alternative_names = ["*.{local.domain_name}"]
-  subject_alternative_names = var.alt_names
+  domain_name               = var.domain_name
+  subject_alternative_names = ["*.${var.domain_name}"]
   validation_method         = "DNS"
 
   tags = {

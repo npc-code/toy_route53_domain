@@ -19,7 +19,3 @@ variable "profile" {
     default = ""
 }
 
-variable "alt_names" {
-    type = list(string)
-    default = []
-}
