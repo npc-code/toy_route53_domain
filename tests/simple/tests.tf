@@ -9,6 +9,7 @@ module "under_test" {
   profile   = "test"
   region    = "us-east-1"
   domain_name = "testing.com"
+  alt_names = ["dev.testing.com", "prod.testing.com"]
   ttl = "300"
 
   providers = {

@@ -18,3 +18,8 @@ variable "profile" {
     type = string
     default = ""
 }
+
+variable "alt_names" {
+    type = list(string)
+    default = []
+}
