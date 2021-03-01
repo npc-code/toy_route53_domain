@@ -1,11 +1,20 @@
+locals {
+    domain = var.domain_name
+    # Removing trailing dot from domain - just to be sure :)
+    domain_name = trimsuffix(local.domain, ".")
+    
+}
+
+
 
 resource "aws_route53_zone" "main_zone" {
-  name = var.domain_name
+  name = local.domain_name
+  force_destroy = true
 }
 
 resource "aws_acm_certificate" "cert_request" {
-  domain_name               = var.domain_name
-  subject_alternative_names = ["*.{var.domain_name}"]
+  domain_name               = local.domain_name
+  subject_alternative_names = ["*.{local.domain_name}"]
   validation_method         = "DNS"
 
   tags = {
@@ -39,13 +48,13 @@ resource "aws_acm_certificate_validation" "certificate_validation" {
   validation_record_fqdns = [for record in aws_route53_record.validation_record : record.fqdn]
 }
 
-resource "aws_route53_record" "caa_record" {
-  zone_id = aws_route53_zone.main_zone.zone_id
-  name    = var.domain_name
-  type    = "CAA"
-  records = [
-    "0 issue \"amazon.com\"",
-    "0 issuewild \"amazon.com\""
-  ]
-  ttl = var.ttl
-}
+#resource "aws_route53_record" "caa_record" {
+#  zone_id = aws_route53_zone.main_zone.zone_id
+#  name    = var.domain_name
+#  type    = "CAA"
+#  records = [
+#    "0 issue \"amazon.com\"",
+#    "0 issuewild \"amazon.com\""
+#  ]
+#  ttl = var.ttl
+#}
